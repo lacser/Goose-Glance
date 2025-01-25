@@ -1,0 +1,53 @@
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+/* Goose Glance panel styles */
+.goose-glance-panel {
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  background-color: #fff !important;
+}
+
+.goose-glance-panel .panel-heading {
+  background-color: #3C4049 !important;
+  color: white !important;
+  padding: 10px 15px !important;
+  border-top-left-radius: 4px !important;
+  border-top-right-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  height: 40px !important;
+  line-height: 20px !important;
+}
+
+.goose-glance-panel .panel-body {
+  padding: 15px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #333 !important;
+}
+
+.goose-glance-panel .loading {
+  text-align: center !important;
+  padding: 20px !important;
+  color: #666 !important;
+  font-style: italic !important;
+}
+
+.goose-glance-panel pre {
+  white-space: pre-wrap !important;
+  font-family: Arial, sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+}
+
+/* Override any conflicting styles */
+.goose-glance-panel * {
+  box-sizing: border-box !important;
+}
+
+.goose-glance-panel strong {
+  font-weight: bold !important;
+}

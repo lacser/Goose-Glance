@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Goose Glance",
+  "version": "0.1",
+  "description": "AI-powered job description analyzer for WaterlooWorks",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.waterlooworks.uwaterloo.ca/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ]
+}
