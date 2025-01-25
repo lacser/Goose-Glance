@@ -1,20 +1,36 @@
 {
-  "manifest_version": 3,
-  "name": "Goose Glance",
-  "version": "0.1",
-  "description": "AI-powered job description analyzer for WaterlooWorks",
-  "permissions": [
-    "activeTab",
-    "storage"
-  ],
-  "action": {
-    "default_popup": "popup.html"
-  },
-  "content_scripts": [
-    {
-      "matches": ["*://*.waterlooworks.uwaterloo.ca/*"],
-      "js": ["content.js"],
-      "css": ["styles.css"]
-    }
-  ]
+    "manifest_version": 3,
+    "name": "Goose Glance",
+    "version": "0.1",
+    "description": "AI-powered job description analyzer for WaterlooWorks",
+    "permissions": [
+        "activeTab",
+        "storage"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.waterlooworks.uwaterloo.ca/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "styles.css"
+            ]
+        }
+    ]
 }
