@@ -32,5 +32,9 @@
                 "styles.css"
             ]
         }
-    ]
+    ],
+    "web_accessible_resources": [{
+        "resources": ["lib/fluent-components.js"],
+        "matches": ["<all_urls>"]
+    }]
 }
