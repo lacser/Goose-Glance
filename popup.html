@@ -74,6 +74,12 @@
       font-weight: 600;
     }
 
+    #saveSpinner {
+      height: 18px;
+      width: 18px;
+      display: none;
+    }
+
     .apiKeyMessage {
       font-weight: 600;
       font-size: 12px;
@@ -96,7 +102,12 @@
       </fluent-text-field>
       <div class="apiKeyTestDiv">
         <div class="apiKeyMessage" id="apiKeyMessage">API KEY MESSAGE</div>
-        <fluent-button id="apiKeyTestButton">Test Connection</fluent-button>
+        <fluent-button id="apiKeyTestButton">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <fluent-progress-ring id="saveSpinner"></fluent-progress-ring>
+            <span id="apiKeyTestButtonLabel">Test Connection</span>
+          </div>
+        </fluent-button>
       </div>
     </div>
     <fluent-button id="saveButton" appearance="accent">Save</fluent-button>

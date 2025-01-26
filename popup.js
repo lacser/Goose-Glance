@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const apiKeyInput = document.getElementById('apiKey');
   const saveButton = document.getElementById('saveButton');
   const apiKeyTestButton = document.getElementById('apiKeyTestButton');
+  const apiKeyTestButtonLabel = document.getElementById('apiKeyTestButtonLabel');
   const apiKeyMessageDiv = document.getElementById('apiKeyMessage');
+  const saveSpinner = document.getElementById('saveSpinner');
 
   // Load saved API key if it exists
   chrome.storage.sync.get(['openaiApiKey'], function (result) {
@@ -47,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     try {
-      apiKeyTestButton.textContent = 'Testing';
+      saveSpinner.style.display = 'inline-block';
+      apiKeyTestButtonLabel.textContent = 'Testing';
       apiKeyTestButton.disabled = true;
 
       const response = await fetch('https://api.openai.com/v1/models', {
@@ -57,12 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       if (response.ok) {
-        apiKeyTestButton.textContent = 'Success';
+        apiKeyTestButtonLabel.textContent = 'Success';
         apiKeyTestButton.style.color = 'green';
         apiKeyMessageDiv.textContent = 'API key is valid';
         apiKeyMessageDiv.style.color = 'green';
       } else {
-        apiKeyTestButton.textContent = 'Failed';
+        apiKeyTestButtonLabel.textContent = 'Failed';
         apiKeyTestButton.style.color = 'red';
         apiKeyMessageDiv.textContent = 'Invalid API key';
         apiKeyMessageDiv.style.color = 'red';
@@ -72,12 +75,13 @@ document.addEventListener('DOMContentLoaded', function () {
       apiKeyMessageDiv.style.color = 'red';
     } finally {
       apiKeyMessageDiv.style.visibility = 'visible';
+      saveSpinner.style.display = 'none';
       setTimeout(() => {
         apiKeyMessageDiv.style.visibility = 'hidden';
-        apiKeyTestButton.textContent = 'Test Connection';
+        apiKeyTestButtonLabel.textContent = 'Test Connection';
         apiKeyTestButton.style.color = '';
         apiKeyTestButton.disabled = false;
-      }, 5000);
+      }, 4000);
     }
   };
 
