@@ -42,6 +42,7 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
+      gap: 8px;
     }
 
     fluent-header {
@@ -55,24 +56,28 @@
       margin-bottom: 16px;
       display: flex;
       flex-direction: column;
+      gap: 8px;
     }
 
     fluent-text-field {
       width: 100%;
-      margin-top: 8px;
+    }
+
+    .apiKeyTestDiv {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     fluent-button {
-      margin-top: 8px;
-      align-self: flex-end;
+      align-self: end;
       font-weight: 600;
     }
 
-    .error {
-      color: var(--error-color, #d13438);
-      margin-top: 4px;
+    .apiKeyMessage {
+      font-weight: 600;
       font-size: 12px;
-      display: none;
+      visibility: hidden;
     }
   </style>
   <script type="module" src="lib/fluent-components.js"></script>
@@ -89,8 +94,10 @@
       <fluent-label for="apiKey">OpenAI API Key</fluent-label>
       <fluent-text-field type="password" id="apiKey" placeholder="Enter your OpenAI API key" appearance="filled">
       </fluent-text-field>
-      <fluent-button id="apiTestButton">Test Connection</fluent-button>
-      <div class="error" id="error">Please enter a valid API key</div>
+      <div class="apiKeyTestDiv">
+        <div class="apiKeyMessage" id="apiKeyMessage">API KEY MESSAGE</div>
+        <fluent-button id="apiKeyTestButton">Test Connection</fluent-button>
+      </div>
     </div>
     <fluent-button id="saveButton" appearance="accent">Save</fluent-button>
   </fluent-card>
