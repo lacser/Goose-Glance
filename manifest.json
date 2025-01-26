@@ -30,11 +30,12 @@
             ],
             "css": [
                 "styles.css"
-            ]
+            ],
+            "type": "module"
         }
     ],
     "web_accessible_resources": [{
-        "resources": ["lib/fluent-components.js"],
+        "resources": ["lib/fluent-components.js", "utils/tableUtils.js"],
         "matches": ["<all_urls>"]
     }]
 }

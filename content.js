@@ -1,3 +1,12 @@
+let extractAllTablesData;
+
+// Initialize module imports
+async function initializeModules() {
+  const tableUtilsUrl = chrome.runtime.getURL('utils/tableUtils.js');
+  const module = await import(tableUtilsUrl);
+  extractAllTablesData = module.extractAllTablesData;
+}
+
 // Function to analyze job description using OpenAI API
 async function analyzeJobDescription(description) {
   try {
@@ -47,7 +56,7 @@ async function analyzeJobDescription(description) {
 }
 
 // Function to create and insert the Goose Glance window
-function createGooseGlanceWindow() {
+async function createGooseGlanceWindow() {
   const postingDiv = document.getElementById('postingDiv');
   if (!postingDiv) return;
 
@@ -69,11 +78,9 @@ function createGooseGlanceWindow() {
   const firstPanel = postingDiv.querySelector('.panel');
   firstPanel.parentNode.insertBefore(container, firstPanel);
 
-  // Get job description text
-  const jobSummary = document.querySelector('.np-view-question--22')?.textContent || '';
-  const responsibilities = document.querySelector('.np-view-question--23')?.textContent || '';
-  const requirements = document.querySelector('.np-view-question--24')?.textContent || '';
-  const fullDescription = `${jobSummary}\n\n${responsibilities}\n\n${requirements}`;
+  const fullDescription = extractAllTablesData(postingDiv);
+
+  console.log(fullDescription);
 
   // Analyze the job description
   analyzeJobDescription(fullDescription).then(analysis => {
@@ -106,4 +113,8 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Initialize when the page loads
-window.addEventListener('load', createGooseGlanceWindow);
+window.addEventListener('load', () => {
+  initializeModules()
+    .then(() => createGooseGlanceWindow())
+    .catch(console.error);
+});
