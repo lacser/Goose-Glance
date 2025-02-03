@@ -1,118 +1,162 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Goose Glance</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
+    <style>
+      @font-face {
+        font-family: 'Poppins';
+        src: url('./lib/Poppins/Poppins-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
 
-<head>
-  <title>Goose Glance</title>
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
-  <style>
-    @font-face {
-      font-family: 'Poppins';
-      src: url('./lib/Poppins/Poppins-Regular.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
+      @font-face {
+        font-family: 'Poppins';
+        src: url('./lib/Poppins/Poppins-SemiBold.ttf') format('truetype');
+        font-weight: 600;
+        font-style: normal;
+      }
 
-    @font-face {
-      font-family: 'Poppins';
-      src: url('./lib/Poppins/Poppins-SemiBold.ttf') format('truetype');
-      font-weight: 600;
-      font-style: normal;
-    }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box !important;
+      }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box !important;
-    }
+      header {
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    header {
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      body {
+        width: 300px;
+        margin: 0;
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto,
+          'Helvetica Neue', sans-serif;
+      }
 
-    body {
-      width: 300px;
-      margin: 0;
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    }
+      label {
+        font-weight: 400;
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
+      }
 
-    fluent-card {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      fluent-card {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    fluent-header {
-      display: inline-block;
-      font-size: 20px;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-    }
+      fluent-header {
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+      }
 
-    .input-group {
-      margin-bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      .input-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
 
-    fluent-text-field {
-      width: 100%;
-    }
+      .settingsGroup {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    .apiKeyTestDiv {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      fluent-text-field {
+        width: 100%;
+      }
 
-    fluent-button {
-      align-self: end;
-      font-weight: 600;
-    }
+      .apiKeyTestDiv,
+      .autoAnalysisSwitchDiv {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    #saveSpinner {
-      height: 18px;
-      width: 18px;
-      display: none;
-    }
+      fluent-button {
+        align-self: end;
+        font-weight: 600;
+      }
 
-    .apiKeyMessage {
-      font-weight: 600;
-      font-size: 12px;
-      visibility: hidden;
-    }
-  </style>
-  <script type="module" src="lib/fluent-components.js"></script>
-</head>
+      #saveSpinner {
+        height: 18px;
+        width: 18px;
+        display: none;
+      }
 
-<body>
-  <fluent-card>
-    <header>
-      <fluent-header>Goose Glance</fluent-header>
-      <image src="./icons/icon128.png" width="30" height="30" alt="Goose Glance Logo" />
-    </header>
+      .apiKeyMessage {
+        font-weight: 600;
+        font-size: 12px;
+        visibility: hidden;
+      }
+    </style>
+    <script type="module" src="lib/fluent-components.js"></script>
+  </head>
 
-    <div class="input-group">
-      <fluent-label for="apiKey">OpenAI API Key</fluent-label>
-      <fluent-text-field type="password" id="apiKey" placeholder="Enter your OpenAI API key" appearance="filled">
-      </fluent-text-field>
-      <div class="apiKeyTestDiv">
-        <div class="apiKeyMessage" id="apiKeyMessage">API KEY MESSAGE</div>
-        <fluent-button id="apiKeyTestButton" appearance="outline">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <fluent-progress-ring id="saveSpinner"></fluent-progress-ring>
-            <span id="apiKeyTestButtonLabel">Test Connection</span>
+  <body>
+    <fluent-card>
+      <header>
+        <fluent-header>Goose Glance</fluent-header>
+        <image
+          src="./icons/icon128.png"
+          width="30"
+          height="30"
+          alt="Goose Glance Logo"
+        />
+      </header>
+
+      <div class="input-group">
+        <div class="settingsGroup">
+          <label for="apiKey">OpenAI API Key</label>
+          <fluent-text-field
+            type="password"
+            id="apiKey"
+            placeholder="Enter your OpenAI API key"
+            appearance="filled"
+          >
+          </fluent-text-field>
+          <div class="apiKeyTestDiv">
+            <div class="apiKeyMessage" id="apiKeyMessage">API KEY MESSAGE</div>
+            <fluent-button id="apiKeyTestButton" appearance="outline">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <fluent-progress-ring id="saveSpinner"></fluent-progress-ring>
+                <span id="apiKeyTestButtonLabel">Test Connection</span>
+              </div>
+            </fluent-button>
           </div>
-        </fluent-button>
+        </div>
+        <div class="settingsGroup">
+          <div class="autoAnalysisSwitchDiv">
+            <label for="autoAnalysisSwitch">Auto Analysis</label>
+            <fluent-switch id="autoAnalysisSwitch" checked />
+          </div>
+        </div>
+        <div class="settingsGroup">
+          <label for="languageSelect">Language</label>
+          <fluent-combobox
+            id="languageSelect"
+            placeholder="Select a language"
+            autocomplete="list"
+            position="above"
+          >
+            <fluent-option value="en">English</fluent-option>
+            <fluent-option value="fr">French</fluent-option>
+            <fluent-option value="zh">Chinese</fluent-option>
+          </fluent-combobox>
+        </div>
       </div>
-    </div>
-    <fluent-button id="saveButton" appearance="accent">Save</fluent-button>
-  </fluent-card>
-  <script src="popup.js"></script>
-</body>
-
+      <fluent-button id="saveButton" appearance="accent">Save</fluent-button>
+    </fluent-card>
+    <script src="popup.js"></script>
+  </body>
 </html>

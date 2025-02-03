@@ -6,15 +6,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const apiKeyMessageDiv = document.getElementById('apiKeyMessage');
   const saveSpinner = document.getElementById('saveSpinner');
 
-  // Load saved API key if it exists
-  chrome.storage.sync.get(['openaiApiKey'], function (result) {
+  // Load saved settings if they exist
+  chrome.storage.sync.get(['openaiApiKey', 'autoAnalysis', 'language'], function (result) {
     if (result.openaiApiKey) {
       apiKeyInput.value = result.openaiApiKey;
     }
+    
+    if (result.autoAnalysis !== undefined) {
+      document.getElementById('autoAnalysisSwitch').checked = result.autoAnalysis;
+    }
+    
+    if (result.language) {
+      document.getElementById('languageSelect').value = result.language;
+    } else {
+      document.getElementById('languageSelect').value = 'English';
+    }
   });
 
-  const saveApiKey = () => {
+  const saveSettings = () => {
     const apiKey = apiKeyInput.value.trim();
+    const autoAnalysis = document.getElementById('autoAnalysisSwitch').checked;
+    const language = document.getElementById('languageSelect').value;
 
     if (!apiKey) {
       apiKeyMessageDiv.textContent = 'Please enter a valid API key';
@@ -22,9 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // Save API key
+    // Save all settings
     chrome.storage.sync.set({
-      openaiApiKey: apiKey
+      openaiApiKey: apiKey,
+      autoAnalysis: autoAnalysis,
+      language: language
     }, function () {
       // Update button text to show success
       saveButton.textContent = 'Saved';
@@ -86,5 +100,5 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   apiKeyTestButton.addEventListener('click', testApiKey);
-  saveButton.addEventListener('click', saveApiKey);
+  saveButton.addEventListener('click', saveSettings);
 });

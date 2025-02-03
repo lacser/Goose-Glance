@@ -2,13 +2,16 @@
 
 ## Goose Glance Insight Elements
 
-- Basic Job Information
+- Job Info
   - Job Title (A more descriptive AI-Generated Job Title)
   - Key Role, 1~3 points, with keyword highlighted
-- Company Info
-  - Company Name
+- Basic Info
+  - Work term Length
   - Working Location (City, Province and Country if the job is not located within Canada)
     - On-site, Hybrid or Fully Remote
+- Company Info
+  - Company Name
+
 - Required Skills
   - Technical Skills
   - Programming languages, Frameworks
