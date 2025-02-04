@@ -35,7 +35,7 @@
         }
     ],
     "web_accessible_resources": [{
-        "resources": ["lib/fluent-components.js", "utils/tableUtils.js"],
+        "resources": ["lib/fluent-components.js", "utils/tableUtils.js", "utils/openAiUtils.js", "schemas/llm_config.json", "schemas/schema_all.json"],
         "matches": ["<all_urls>"]
     }]
 }

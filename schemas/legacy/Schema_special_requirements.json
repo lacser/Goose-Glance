@@ -1,0 +1,48 @@
+{
+    "name": "job_requirements",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "properties": {
+        "speak_french": {
+          "type": "string",
+          "description": "Requirement for French language proficiency",
+          "enum": ["Not required", "Preferred", "Required"]
+        },
+        "driver_license": {
+          "type": "string",
+          "description": "Requirement for a valid driver's license",
+          "enum": ["Not required", "Preferred", "Required"]
+        },
+        "background_check": {
+          "type": "boolean",
+          "description": "Requires criminal background check"
+        },
+        "canadian_citizen_or_pr": {
+          "type": "string",
+          "description": "Requirement for Canadian citizenship/PR status",
+          "enum": ["Not required", "Preferred", "Required"]
+        },
+        "work_visa": {
+          "type": "boolean",
+          "description": "This ONLY applies to jobs outsied of Canada. Select true if the job requires a work visa"
+        },
+        "other_special_requirements": {
+          "type": "array",
+          "description": "Additional special requirements (e.g. certifications, licenses, health clearances)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "speak_french",
+        "driver_license",
+        "background_check",
+        "canadian_citizen_or_pr",
+        "work_visa",
+        "other_special_requirements"
+      ],
+      "additionalProperties": false
+    }
+  }

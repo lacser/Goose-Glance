@@ -1,0 +1,25 @@
+{
+  "name": "job_required_skills",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "technical_skills": {
+        "type": "array",
+        "description": "Programming languages, frameworks, and technical tools",
+        "items": {
+          "type": "string"
+        }
+      },
+      "soft_skills": {
+        "type": "array",
+        "description": "Non-technical skills like communication or teamwork",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["technical_skills", "soft_skills"],
+    "additionalProperties": false
+  }
+}
