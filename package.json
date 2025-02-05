@@ -6,12 +6,14 @@
   "scripts": {
     "dev:popup": "vite components/popup",
     "dev:content": "vite components/content",
-    "build": "tsc -p components/popup/tsconfig.app.json && tsc -p components/popup/tsconfig.node.json && tsc -p components/content/tsconfig.app.json && tsc -p components/content/tsconfig.node.json && vite build components/popup && vite build components/content && if exist public xcopy /E /I /Y public dist",
+    "watch": "node scripts/watch.js",
+    "build": "node scripts/build.js",
     "lint": "eslint .",
     "preview:popup": "vite preview components/popup",
     "preview:content": "vite preview components/content"
   },
   "dependencies": {
+    "@fluentui/react": "^8.122.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -24,6 +26,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "nodemon": "^3.1.9",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5"
