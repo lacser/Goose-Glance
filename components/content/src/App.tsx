@@ -1,27 +1,38 @@
 import { Button } from "@fluentui/react-components";
-import { useAppDispatch } from "./store/hooks";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { setJobDescription } from "./store/slices/waterlooworksSlice";
 import { useEffect } from "react";
 
-interface ChromeMessage {
-  type: string;
-  payload: string;
-}
-
 function App() {
   const dispatch = useAppDispatch();
+  const jobDescription = useAppSelector((state) => state.waterlooworks.jobDescription);
 
   useEffect(() => {
-    const messageListener = (message: ChromeMessage) => {
-      if (message.type === "SET_JOB_DESCRIPTION") {
-        dispatch(setJobDescription(message.payload));
+    const messageListener = (event: MessageEvent) => {
+      console.log("Received message", event.data);
+      if (event.data && event.data.type === "SET_JOB_DESCRIPTION") {
+        dispatch(setJobDescription(event.data.payload));
       }
     };
 
-    chrome.runtime.onMessage.addListener(messageListener);
+    window.addEventListener("message", messageListener);
+
+    const sendHeight = () => {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: "adjustHeight", height }, "https://waterlooworks.uwaterloo.ca/*");
+    };
+
+    const observer = new MutationObserver(sendHeight);
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true 
+    });
+
+    sendHeight();
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messageListener);
+      window.removeEventListener("message", messageListener);
+      observer.disconnect();
     };
   }, [dispatch]);
 
@@ -32,7 +43,7 @@ function App() {
           Job Description Analysis
         </h2>
         <div id="analysisContent" className="text-gray-700 whitespace-pre-wrap">
-          {/* Job description will be displayed here */}
+          {jobDescription}
         </div>
         <div className="mt-4">
           <Button appearance="primary">Analyze</Button>

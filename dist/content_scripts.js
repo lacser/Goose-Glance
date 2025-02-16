@@ -62,9 +62,15 @@ async function createPanel() {
 async function loadPosting(postingDiv) {
   const fullDescription = utils.extractAllTablesData(postingDiv);
 
-  chrome.runtime.sendMessage({
-    type: "SET_JOB_DESCRIPTION",
-    payload: fullDescription,
+  const iframes = document.querySelectorAll('iframe[src^="chrome-extension://"]');
+
+  iframes.forEach(iframe => {
+    iframe.addEventListener('load', () => {
+      iframe.contentWindow.postMessage({
+        type: "SET_JOB_DESCRIPTION",
+        payload: fullDescription,
+      }, `chrome-extension://${chrome.runtime.id}`);
+    });
   });
 }
 
