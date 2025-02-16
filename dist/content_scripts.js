@@ -1,4 +1,3 @@
-// Import required modules
 let utils;
 
 async function initializeModules() {
@@ -11,7 +10,6 @@ async function initializeModules() {
   };
 }
 
-// Add styles
 const style = document.createElement("style");
 style.textContent = `
   .goose-glance-panel {
@@ -19,17 +17,13 @@ style.textContent = `
     border-radius: 4px;
   }
   .goose-glance-panel .panel-heading {
-    background-color: #3C4049;
-    color: white;
+    background-color: #D8E7F0;
+    color: black;
     padding: 10px 15px;
   }
   .goose-glance-panel .panel-body {
-    padding: 15px;
-  }
-  .goose-glance-panel .loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
+    padding: 0;
+    min-height: 400px;
   }
 `;
 document.head.appendChild(style);
@@ -40,14 +34,14 @@ async function createPanel() {
 
   const container = document.createElement("div");
   container.className = "panel panel-default goose-glance-panel";
+
+  const iframeSrc = chrome.runtime.getURL("content/index.html");
   container.innerHTML = `
     <div class="panel-heading">
       <strong>Goose Glance Insight</strong>
     </div>
     <div class="panel-body">
-      <div id="gooseGlanceContent">
-        <div class="loading">Waiting for analysis...</div>
-      </div>
+      <iframe style="border:none; width:100%" src="${iframeSrc}"></iframe>
     </div>
   `;
 
@@ -57,27 +51,12 @@ async function createPanel() {
 }
 
 async function loadPosting(postingDiv) {
-  const contentDiv = document.getElementById("gooseGlanceContent");
-  contentDiv.innerHTML =
-    '<div class="loading">Analyzing job description...</div>';
-
   const fullDescription = utils.extractAllTablesData(postingDiv);
-  console.log(fullDescription);
 
   chrome.runtime.sendMessage({
-    type: 'SET_JOB_DESCRIPTION',
-    payload: fullDescription
+    type: "SET_JOB_DESCRIPTION",
+    payload: fullDescription,
   });
-
-  // Create and load the iframe
-  const iframe = document.createElement('iframe');
-  iframe.style.width = '100%';
-  iframe.style.height = '500px'; // Set an appropriate height
-  iframe.style.border = 'none';
-  iframe.src = chrome.runtime.getURL('content/index.html');
-  
-  contentDiv.innerHTML = ''; // Clear loading message
-  contentDiv.appendChild(iframe);
 }
 
 async function initialize() {
