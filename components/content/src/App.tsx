@@ -1,40 +1,10 @@
 import { Button } from "@fluentui/react-components";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { setJobDescription } from "./store/slices/waterlooworksSlice";
-import { useEffect } from "react";
+import { useAppSelector } from "./store/hooks";
+import { useContextService } from "./utils/contextService";
 
 function App() {
-  const dispatch = useAppDispatch();
   const jobDescription = useAppSelector((state) => state.waterlooworks.jobDescription);
-
-  useEffect(() => {
-    const messageListener = (event: MessageEvent) => {
-      console.log("Received message", event.data);
-      if (event.data && event.data.type === "SET_JOB_DESCRIPTION") {
-        dispatch(setJobDescription(event.data.payload));
-      }
-    };
-
-    window.addEventListener("message", messageListener);
-
-    const sendHeight = () => {
-      const height = document.documentElement.scrollHeight;
-      window.parent.postMessage({ type: "adjustHeight", height }, "https://waterlooworks.uwaterloo.ca/*");
-    };
-
-    const observer = new MutationObserver(sendHeight);
-    observer.observe(document.body, { 
-      childList: true, 
-      subtree: true 
-    });
-
-    sendHeight();
-
-    return () => {
-      window.removeEventListener("message", messageListener);
-      observer.disconnect();
-    };
-  }, [dispatch]);
+  useContextService();
 
   return (
     <div className="bg-gray-50 p-4">

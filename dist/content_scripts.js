@@ -15,6 +15,7 @@ style.textContent = `
   .goose-glance-panel {
     border: 1px solid #ddd;
     border-radius: 4px;
+    overflow: hidden;
   }
   .goose-glance-panel .panel-heading {
     background-color: #D8E7F0;
@@ -24,6 +25,7 @@ style.textContent = `
   .goose-glance-panel .panel-body {
     padding: 0;
     min-height: 300px;
+    display: flex;
   }
 `;
 document.head.appendChild(style);
