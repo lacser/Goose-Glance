@@ -56,12 +56,13 @@ async function createPanel() {
   return postingDiv;
 }
 
-async function analyze(postingDiv) {
+async function loadPosting(postingDiv) {
   const contentDiv = document.getElementById("gooseGlanceContent");
   contentDiv.innerHTML =
     '<div class="loading">Analyzing job description...</div>';
 
   const fullDescription = utils.extractAllTablesData(postingDiv);
+  console.log(fullDescription);
 
   chrome.runtime.sendMessage({
     type: 'SET_JOB_DESCRIPTION',
@@ -85,7 +86,7 @@ async function initialize() {
     const postingDiv = await createPanel();
     if (!postingDiv) return;
 
-    await analyze(postingDiv);
+    await loadPosting(postingDiv);
   } catch (error) {
     console.error("Goose Glance initialization failed:", error);
   }
