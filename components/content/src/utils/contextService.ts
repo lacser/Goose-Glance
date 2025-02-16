@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { setJobDescription } from "../store/slices/waterlooworksSlice";
+import { setOpenAiApiKey, setAutoAnalysis, setLanguage } from "../store/slices/settingsSlice";
 import { Dispatch } from "@reduxjs/toolkit";
 
 export const useContextService = () => {
@@ -9,10 +10,12 @@ export const useContextService = () => {
   useEffect(() => {
     const cleanupMessageListener = setupJobDescriptionListener(dispatch);
     const cleanupHeightObserver = setupHeightObserver();
+    const cleanupStorageListener = setupChromeStorageListener(dispatch);
 
     return () => {
       cleanupMessageListener();
       cleanupHeightObserver();
+      cleanupStorageListener();
     };
   }, [dispatch]);
 };
@@ -48,5 +51,39 @@ const setupHeightObserver = () => {
 
   return () => {
     observer.disconnect();
+  };
+};
+
+const setupChromeStorageListener = (dispatch: Dispatch) => {
+  // Initial load of settings
+  chrome.storage.sync.get(['openaiApiKey', 'autoAnalysis', 'language'], (result) => {
+    if (result.openaiApiKey) {
+      dispatch(setOpenAiApiKey(result.openaiApiKey));
+    }
+    if (typeof result.autoAnalysis !== 'undefined') {
+      dispatch(setAutoAnalysis(result.autoAnalysis));
+    }
+    if (result.language) {
+      dispatch(setLanguage(result.language));
+    }
+  });
+
+  // Listen for changes
+  const storageListener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (changes.openaiApiKey) {
+      dispatch(setOpenAiApiKey(changes.openaiApiKey.newValue));
+    }
+    if (changes.autoAnalysis) {
+      dispatch(setAutoAnalysis(changes.autoAnalysis.newValue));
+    }
+    if (changes.language) {
+      dispatch(setLanguage(changes.language.newValue));
+    }
+  };
+
+  chrome.storage.sync.onChanged.addListener(storageListener);
+
+  return () => {
+    chrome.storage.sync.onChanged.removeListener(storageListener);
   };
 };
