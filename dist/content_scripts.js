@@ -23,7 +23,7 @@ style.textContent = `
   }
   .goose-glance-panel .panel-body {
     padding: 0;
-    min-height: 400px;
+    min-height: 300px;
   }
 `;
 document.head.appendChild(style);
@@ -44,6 +44,15 @@ async function createPanel() {
       <iframe style="border:none; width:100%" src="${iframeSrc}"></iframe>
     </div>
   `;
+
+  window.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "adjustHeight") {
+      const iframe = document.querySelector('iframe[src^="chrome-extension://"]');
+      if (iframe) {
+        iframe.style.height = event.data.height + "px";
+      }
+    }
+  });
 
   const firstPanel = postingDiv.querySelector(".panel");
   firstPanel.parentNode.insertBefore(container, firstPanel);
