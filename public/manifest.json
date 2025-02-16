@@ -23,5 +23,11 @@
       "js": ["content_scripts.js"],
       "type": "module"
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["utils/tableUtils.js"],
+      "matches": ["*://*.waterlooworks.uwaterloo.ca/*"]
+    }
   ]
 }
