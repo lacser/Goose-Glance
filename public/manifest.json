@@ -26,7 +26,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["utils/tableUtils.js"],
+      "resources": [
+        "utils/tableUtils.js",
+        "content/index.html",
+        "content/assets/*",
+        "content/src/*"
+      ],
       "matches": ["*://*.waterlooworks.uwaterloo.ca/*"]
     }
   ]

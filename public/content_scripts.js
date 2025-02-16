@@ -11,12 +11,6 @@ async function initializeModules() {
   };
 }
 
-// Initialize Fluent UI components
-const fluentScript = document.createElement("script");
-fluentScript.type = "module";
-fluentScript.src = chrome.runtime.getURL("lib/fluent-components.js");
-document.head.appendChild(fluentScript);
-
 // Add styles
 const style = document.createElement("style");
 style.textContent = `
@@ -48,7 +42,7 @@ async function createPanel() {
   container.className = "panel panel-default goose-glance-panel";
   container.innerHTML = `
     <div class="panel-heading">
-      <strong>🦢 Goose Glance Insight</strong>
+      <strong>Goose Glance Insight</strong>
     </div>
     <div class="panel-body">
       <div id="gooseGlanceContent">
@@ -69,9 +63,20 @@ async function analyze(postingDiv) {
 
   const fullDescription = utils.extractAllTablesData(postingDiv);
 
-  console.log(fullDescription);
+  chrome.runtime.sendMessage({
+    type: 'SET_JOB_DESCRIPTION',
+    payload: fullDescription
+  });
 
-  contentDiv.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${fullDescription}</pre>`;
+  // Create and load the iframe
+  const iframe = document.createElement('iframe');
+  iframe.style.width = '100%';
+  iframe.style.height = '500px'; // Set an appropriate height
+  iframe.style.border = 'none';
+  iframe.src = chrome.runtime.getURL('content/index.html');
+  
+  contentDiv.innerHTML = ''; // Clear loading message
+  contentDiv.appendChild(iframe);
 }
 
 async function initialize() {
