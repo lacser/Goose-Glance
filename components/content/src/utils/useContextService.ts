@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { setJobDescription } from "../store/slices/waterlooworksSlice";
-import { setOpenAiApiKey, setAutoAnalysis, setLanguage } from "../store/slices/settingsSlice";
+import {
+  setOpenAiApiKey,
+  setAutoAnalysis,
+  setLanguage,
+} from "../store/slices/settingsSlice";
 import { Dispatch } from "@reduxjs/toolkit";
 
 export const useContextService = () => {
@@ -36,19 +40,28 @@ const setupJobDescriptionListener = (dispatch: Dispatch) => {
 };
 
 const setupHeightObserver = () => {
+  let resizeTimer: NodeJS.Timeout | null = null;
+
   const sendHeight = () => {
-    const height = document.documentElement.scrollHeight;
+    const height = document.body.offsetHeight;
     window.parent.postMessage({ type: "adjustHeight", height }, "*");
   };
 
+  const debouncedSendHeight = () => {
+    if (resizeTimer) {
+      clearTimeout(resizeTimer);
+    }
+    resizeTimer = setTimeout(sendHeight, 200);
+  };
+
   const mutationObserver = new MutationObserver(sendHeight);
-  const resizeObserver = new ResizeObserver(sendHeight);
+  const resizeObserver = new ResizeObserver(debouncedSendHeight);
 
   mutationObserver.observe(document.body, {
     childList: true,
     subtree: true,
     attributes: true,
-    characterData: true
+    characterData: true,
   });
 
   resizeObserver.observe(document.documentElement);
@@ -63,20 +76,25 @@ const setupHeightObserver = () => {
 
 const setupChromeStorageListener = (dispatch: Dispatch) => {
   // Initial load of settings
-  chrome.storage.sync.get(['openaiApiKey', 'autoAnalysis', 'language'], (result) => {
-    if (result.openaiApiKey) {
-      dispatch(setOpenAiApiKey(result.openaiApiKey));
+  chrome.storage.sync.get(
+    ["openaiApiKey", "autoAnalysis", "language"],
+    (result) => {
+      if (result.openaiApiKey) {
+        dispatch(setOpenAiApiKey(result.openaiApiKey));
+      }
+      if (typeof result.autoAnalysis !== "undefined") {
+        dispatch(setAutoAnalysis(result.autoAnalysis));
+      }
+      if (result.language) {
+        dispatch(setLanguage(result.language));
+      }
     }
-    if (typeof result.autoAnalysis !== 'undefined') {
-      dispatch(setAutoAnalysis(result.autoAnalysis));
-    }
-    if (result.language) {
-      dispatch(setLanguage(result.language));
-    }
-  });
+  );
 
   // Listen for changes
-  const storageListener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+  const storageListener = (changes: {
+    [key: string]: chrome.storage.StorageChange;
+  }) => {
     if (changes.openaiApiKey) {
       dispatch(setOpenAiApiKey(changes.openaiApiKey.newValue));
     }
