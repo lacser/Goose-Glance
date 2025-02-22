@@ -44,7 +44,7 @@ const setupHeightObserver = () => {
 
   const sendHeight = () => {
     const height = document.body.offsetHeight;
-    window.parent.postMessage({ type: "adjustHeight", height }, "*");
+    window.parent.postMessage({ type: "adjustHeight", height }, "https://waterlooworks.uwaterloo.ca/*");
   };
 
   const debouncedSendHeight = () => {

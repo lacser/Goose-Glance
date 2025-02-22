@@ -6,7 +6,7 @@ export const useJobSummarization = (jobId: string | null) => {
   const dispatch = useDispatch();
 
   const existingSummary = useAppSelector((state) =>
-    jobId ? state.waterlooworks.jobDescriptions[jobId]?.summary : null
+    jobId ? state.waterlooworks.jobData[jobId]?.summary : null
   );
 
   const openaiApiKey = useAppSelector((state) => state.settings.openaiApiKey);

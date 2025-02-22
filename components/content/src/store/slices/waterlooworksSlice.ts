@@ -6,11 +6,11 @@ interface JobInfo {
 }
 
 export interface WaterlooWorksState {
-  jobDescriptions: { [key: string]: JobInfo };
+  jobData: { [key: string]: JobInfo };
 }
 
 const initialState: WaterlooWorksState = {
-  jobDescriptions: {}
+  jobData: {}
 };
 
 export const waterlooworksSlice = createSlice({
@@ -19,16 +19,16 @@ export const waterlooworksSlice = createSlice({
   reducers: {
     setJobDescription: (state, action: PayloadAction<{ id: string | null; description: string }>) => {
       if (action.payload.id) {
-        state.jobDescriptions[action.payload.id] = {
-          ...state.jobDescriptions[action.payload.id],
+        state.jobData[action.payload.id] = {
+          ...state.jobData[action.payload.id],
           description: action.payload.description
         };
       }
     },
     setJobSummary: (state, action: PayloadAction<{ id: string; summary: string }>) => {
-      if (state.jobDescriptions[action.payload.id]) {
-        state.jobDescriptions[action.payload.id] = {
-          ...state.jobDescriptions[action.payload.id],
+      if (state.jobData[action.payload.id]) {
+        state.jobData[action.payload.id] = {
+          ...state.jobData[action.payload.id],
           summary: action.payload.summary
         };
       }

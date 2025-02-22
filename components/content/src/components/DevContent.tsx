@@ -1,4 +1,4 @@
-import { Button } from "@fluentui/react-components";
+import { Button, Card, Spinner } from "@fluentui/react-components";
 import { useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import { useJobSummarization } from "../utils/useJobSummarization";
@@ -7,13 +7,13 @@ export function DevContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const jobDescription = useAppSelector((state) => {
-    const descriptions = state.waterlooworks.jobDescriptions;
-    const ids = Object.keys(descriptions);
+  const jobData = useAppSelector((state) => {
+    const data = state.waterlooworks.jobData;
+    const ids = Object.keys(data);
     return ids.length > 0
       ? {
-          description: descriptions[ids[ids.length - 1]].description,
-          summary: descriptions[ids[ids.length - 1]].summary,
+          description: data[ids[ids.length - 1]].description,
+          summary: data[ids[ids.length - 1]].summary,
           id: ids[ids.length - 1],
         }
       : null;
@@ -23,20 +23,16 @@ export function DevContent() {
     (state) => state.settings
   );
 
-  const summary = useAppSelector((state) => 
-    jobDescription?.id ? state.waterlooworks.jobDescriptions[jobDescription.id]?.summary : null
-  );
-
-  const { summarizeJob } = useJobSummarization(jobDescription?.id || null);
+  const { summarizeJob } = useJobSummarization(jobData?.id || null);
 
   const handleAnalyze = async () => {
-    if (!jobDescription?.description) return;
+    if (!jobData?.description) return;
     
     setIsLoading(true);
     setError(null);
     
     try {
-      await summarizeJob(jobDescription.description);
+      await summarizeJob(jobData.description);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -48,63 +44,83 @@ export function DevContent() {
     try {
       const summaryData = JSON.parse(summary);
       return (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-indigo-600">{summaryData.job_title}</h3>
-            <p className="text-sm text-gray-500">{summaryData.company_name}</p>
+            <h3 className="block text-indigo-600 semibold">
+              {summaryData.job_title}
+            </h3>
+            <p className="text-gray-500">
+              {summaryData.company_name}
+            </p>
           </div>
           
           <div>
-            <h4 className="font-medium">Key Roles</h4>
-            <ul className="list-disc pl-5">
+            <h4 className="mb-2 block medium">Key Roles</h4>
+            <ul className="list-disc pl-5 space-y-1">
               {summaryData.key_roles.map((role: string, index: number) => (
                 <li key={index} dangerouslySetInnerHTML={{ __html: role }} />
               ))}
             </ul>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium">Technical Skills</h4>
-              <ul className="list-disc pl-5">
+              <h4 className="mb-2 block medium">Technical Skills</h4>
+              <ul className="list-disc pl-5 space-y-1">
                 {summaryData.technical_skills.map((skill: string, index: number) => (
-                  <li key={index}>{skill}</li>
+                  <li key={index}><p>{skill}</p></li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="font-medium">Soft Skills</h4>
-              <ul className="list-disc pl-5">
+              <h4 className="mb-2 block medium">Soft Skills</h4>
+              <ul className="list-disc pl-5 space-y-1">
                 {summaryData.soft_skills.map((skill: string, index: number) => (
-                  <li key={index}>{skill}</li>
+                  <li key={index}><p>{skill}</p></li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p><strong>Location:</strong> {summaryData.working_location || 'Not specified'}</p>
-              <p><strong>Work Type:</strong> {summaryData.work_type?.replace('_', ' ') || 'Not specified'}</p>
-              <p><strong>Term Length:</strong> {summaryData.work_term_length} months</p>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <p className="whitespace-normal">
+                <strong>Location:</strong> {summaryData.working_location || 'Not specified'}
+              </p>
+              <p className="whitespace-normal">
+                <strong>Work Type:</strong> {summaryData.work_type?.replace('_', ' ') || 'Not specified'}
+              </p>
+              <p className="whitespace-normal">
+                <strong>Term Length:</strong> {summaryData.work_term_length} months
+              </p>
               {summaryData.work_term_month && (
-                <p><strong>Term Period:</strong> {summaryData.work_term_month.join(' - ')}</p>
+                <p className="whitespace-normal">
+                  <strong>Term Period:</strong> {summaryData.work_term_month.join(' - ')}
+                </p>
               )}
             </div>
-            <div>
-              <p><strong>French:</strong> {summaryData.speak_french}</p>
-              <p><strong>Driver's License:</strong> {summaryData.driver_license}</p>
-              <p><strong>Background Check:</strong> {summaryData.background_check ? 'Required' : 'Not required'}</p>
-              <p><strong>Canadian Citizen/PR:</strong> {summaryData.canadian_citizen_or_pr}</p>
+            <div className="space-y-2">
+              <p className="whitespace-normal">
+                <strong>French:</strong> {summaryData.speak_french}
+              </p>
+              <p className="whitespace-normal">
+                <strong>Driver's License:</strong> {summaryData.driver_license}
+              </p>
+              <p className="whitespace-normal">
+                <strong>Background Check:</strong> {summaryData.background_check ? 'Required' : 'Not required'}
+              </p>
+              <p className="whitespace-normal">
+                <strong>Canadian Citizen/PR:</strong> {summaryData.canadian_citizen_or_pr}
+              </p>
             </div>
           </div>
 
           {summaryData.other_special_requirements.length > 0 && (
             <div>
-              <h4 className="font-medium">Special Requirements</h4>
-              <ul className="list-disc pl-5">
+              <h4 className="mb-2 block medium">Special Requirements</h4>
+              <ul className="list-disc pl-5 space-y-1">
                 {summaryData.other_special_requirements.map((req: string, index: number) => (
-                  <li key={index}>{req}</li>
+                  <li key={index}><p className="whitespace-normal">{req}</p></li>
                 ))}
               </ul>
             </div>
@@ -118,68 +134,68 @@ export function DevContent() {
   };
 
   return (
-    <div className="bg-gray-50 p-4">
-      <div className="bg-white rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-indigo-600 mb-4">
-          Job Description Analysis
-        </h2>
-        <div className="mb-4">
-          <p>
+    <div className="p-4 grid grid-cols-3 gap-6">
+      <Card className="p-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        <h2 className="block mb-4 semibold">Configuration</h2>
+        <div className="space-y-3">
+          <p className="block whitespace-normal">
             <strong>API Key:</strong> {openaiApiKey ? '********' : 'Not set'}
           </p>
-          <p>
+          <p className="block whitespace-normal">
             <strong>Auto Analysis:</strong> {String(autoAnalysis)}
           </p>
-          <p>
+          <p className="block whitespace-normal">
             <strong>Language:</strong> {language}
           </p>
+          <p className="block whitespace-normal">
+            <strong>Job ID:</strong> {jobData?.id}
+          </p>
         </div>
-        
+      </Card>
+
+      <Card className="p-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        <h2 className="block mb-4 semibold">Original Description</h2>
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded mb-4">
             {error}
           </div>
         )}
-
-        <div className="mb-6">
-          <h3 className="text-lg font-medium mb-2">Original Description</h3>
-          <div className="text-gray-700 whitespace-pre-wrap border p-4 rounded bg-gray-50">
-            {jobDescription?.description || 'No description available'}
-          </div>
+        <div 
+          className="text-gray-700 whitespace-pre-wrap border p-4 rounded bg-gray-50"
+        >
+          {jobData?.description || 'No description available'}
         </div>
+      </Card>
 
-        <div>
-          <h3 className="text-lg font-medium mb-2">AI Analysis</h3>
-          <div id="analysisContent" className="text-gray-700">
-            {isLoading ? (
-              <div className="text-center py-4">
-                <p>Analyzing job description...</p>
-              </div>
-            ) : summary ? (
-              renderSummary(summary)
-            ) : (
-              <div className="text-gray-500 italic">
-                No analysis available
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <p>
-            <strong>Job ID:</strong> {jobDescription?.id}
-          </p>
-        </div>
-        <div className="mt-4">
+      <Card className="p-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="semibold">AI Analysis</h2>
           <Button 
             appearance="primary"
             onClick={handleAnalyze}
-            disabled={isLoading || !jobDescription?.description}
+            disabled={isLoading || !jobData?.description}
           >
-            {isLoading ? 'Analyzing...' : 'Analyze'}
+            {isLoading ? 'Analyzing' : 'Analyze'}
           </Button>
         </div>
-      </div>
+        <div 
+          id="analysisContent" 
+          className="text-gray-700"
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center py-4 gap-2">
+              <Spinner size="tiny" />
+              <span>Analyzing job description...</span>
+            </div>
+          ) : jobData?.summary ? (
+            renderSummary(jobData.summary)
+          ) : (
+            <div className="text-gray-500 italic">
+              <p>No analysis available</p>
+            </div>
+          )}
+        </div>
+      </Card>
     </div>
   );
 }
