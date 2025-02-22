@@ -1,6 +1,6 @@
 import { Button } from "@fluentui/react-components";
 import { useAppSelector } from "./store/hooks";
-import { useContextService } from "./utils/contextService";
+import { useContextService } from "./utils/useContextService";
 
 function App() {
   const jobDescription = useAppSelector((state) => state.waterlooworks.jobDescription);
