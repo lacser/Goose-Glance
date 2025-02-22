@@ -38,19 +38,26 @@ const setupJobDescriptionListener = (dispatch: Dispatch) => {
 const setupHeightObserver = () => {
   const sendHeight = () => {
     const height = document.documentElement.scrollHeight;
-    window.parent.postMessage({ type: "adjustHeight", height }, "https://waterlooworks.uwaterloo.ca/*");
+    window.parent.postMessage({ type: "adjustHeight", height }, "*");
   };
 
-  const observer = new MutationObserver(sendHeight);
-  observer.observe(document.body, { 
-    childList: true, 
-    subtree: true 
+  const mutationObserver = new MutationObserver(sendHeight);
+  const resizeObserver = new ResizeObserver(sendHeight);
+
+  mutationObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    characterData: true
   });
+
+  resizeObserver.observe(document.documentElement);
 
   sendHeight();
 
   return () => {
-    observer.disconnect();
+    mutationObserver.disconnect();
+    resizeObserver.disconnect();
   };
 };
 
