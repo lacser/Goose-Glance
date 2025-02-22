@@ -1,23 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface JobInfo {
+  description: string;
+  summary?: string;
+}
+
 export interface WaterlooWorksState {
-  jobDescription: string | null;
+  jobDescriptions: { [key: string]: JobInfo };
 }
 
 const initialState: WaterlooWorksState = {
-  jobDescription: null
+  jobDescriptions: {}
 };
 
 export const waterlooworksSlice = createSlice({
   name: 'waterlooworks',
   initialState,
   reducers: {
-    setJobDescription: (state, action: PayloadAction<string>) => {
-      state.jobDescription = action.payload;
+    setJobDescription: (state, action: PayloadAction<{ id: string | null; description: string }>) => {
+      if (action.payload.id) {
+        state.jobDescriptions[action.payload.id] = {
+          ...state.jobDescriptions[action.payload.id],
+          description: action.payload.description
+        };
+      }
+    },
+    setJobSummary: (state, action: PayloadAction<{ id: string; summary: string }>) => {
+      if (state.jobDescriptions[action.payload.id]) {
+        state.jobDescriptions[action.payload.id] = {
+          ...state.jobDescriptions[action.payload.id],
+          summary: action.payload.summary
+        };
+      }
     }
   }
 });
 
-export const { setJobDescription } = waterlooworksSlice.actions;
+export const { setJobDescription, setJobSummary } = waterlooworksSlice.actions;
 
 export default waterlooworksSlice.reducer;

@@ -63,6 +63,17 @@ async function createPanel() {
 
 async function loadPosting(postingDiv) {
   const fullDescription = utils.extractAllTablesData(postingDiv);
+  
+  // Get job ID from the header
+  const jobHeader = document.querySelector('.dashboard-header__profile-information-name');
+  let jobId = null;
+  if (jobHeader) {
+    const headerText = jobHeader.textContent.trim();
+    const match = headerText.match(/(\d+)/);
+    if (match) {
+      jobId = match[1];
+    }
+  }
 
   const iframes = document.querySelectorAll('iframe[src^="chrome-extension://"]');
 
@@ -70,7 +81,10 @@ async function loadPosting(postingDiv) {
     iframe.addEventListener('load', () => {
       iframe.contentWindow.postMessage({
         type: "SET_JOB_DESCRIPTION",
-        payload: fullDescription,
+        payload: {
+          id: jobId,
+          description: fullDescription
+        },
       }, `chrome-extension://${chrome.runtime.id}`);
     });
   });
