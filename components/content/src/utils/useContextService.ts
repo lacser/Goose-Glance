@@ -5,6 +5,7 @@ import {
   setOpenAiApiKey,
   setAutoAnalysis,
   setLanguage,
+  setDevMode,
 } from "../store/slices/settingsSlice";
 import { Dispatch } from "@reduxjs/toolkit";
 
@@ -87,6 +88,9 @@ const setupChromeStorageListener = (dispatch: Dispatch) => {
       if (result.language) {
         dispatch(setLanguage(result.language));
       }
+      if (result.devMode) {
+        dispatch(setDevMode(result.devMode));
+      }
     }
   );
 
@@ -102,6 +106,9 @@ const setupChromeStorageListener = (dispatch: Dispatch) => {
     }
     if (changes.language) {
       dispatch(setLanguage(changes.language.newValue));
+    }
+    if (changes.devMode) {
+      dispatch(setDevMode(changes.devMode.newValue));
     }
   };
 

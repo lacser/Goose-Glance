@@ -10,6 +10,7 @@ export function usePopupLogic() {
     setTestMessage('');
   };
   const [autoAnalysis, setAutoAnalysis] = useState(true);
+  const [devMode, setDevMode] = useState(false);
   const [language, setLanguage] = useState('English');
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [testMessage, setTestMessage] = useState('');
@@ -17,7 +18,7 @@ export function usePopupLogic() {
 
   // Load saved settings on mount
   useEffect(() => {
-    chrome.storage.sync.get(['openaiApiKey', 'autoAnalysis', 'language'], (result) => {
+    chrome.storage.sync.get(['openaiApiKey', 'autoAnalysis', 'language', 'devMode'], (result) => {
       if (result.openaiApiKey) {
         setApiKeyInternal(result.openaiApiKey);
       }
@@ -26,6 +27,9 @@ export function usePopupLogic() {
       }
       if (result.language) {
         setLanguage(result.language);
+      }
+      if (typeof result.devMode !== 'undefined') {
+        setDevMode(result.devMode);
       }
     });
   }, []);
@@ -37,14 +41,13 @@ export function usePopupLogic() {
         openaiApiKey: apiKey.trim(),
         autoAnalysis,
         language,
+        devMode,
       },
       () => {
-        // Indicate we've successfully saved
         setSaveStatus('saved');
-        // Reset after a short delay
         setTimeout(() => {
           setSaveStatus('idle');
-        }, 2000);
+        }, 500);
       }
     );
   };
@@ -83,12 +86,14 @@ export function usePopupLogic() {
   return {
     apiKey,
     setApiKey: handleApiKeyChange,
-    autoAnalysis,
-    setAutoAnalysis,
     language,
     setLanguage,
     testStatus,
     testMessage,
+    autoAnalysis,
+    setAutoAnalysis,
+    devMode,
+    setDevMode,
     saveStatus,
     saveSettings,
     testApiKey,

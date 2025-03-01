@@ -4,12 +4,14 @@ export interface SettingsState {
   openaiApiKey: string;
   autoAnalysis: boolean;
   language: string;
+  devMode: boolean;
 }
 
 const initialState: SettingsState = {
   openaiApiKey: '',
   autoAnalysis: false,
   language: 'English',
+  devMode: false,
 };
 
 export const settingsSlice = createSlice({
@@ -25,8 +27,11 @@ export const settingsSlice = createSlice({
     setLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
     },
+    setDevMode: (state, action: PayloadAction<boolean>) => {
+      state.devMode = action.payload;
+    }
   },
 });
 
-export const { setOpenAiApiKey, setAutoAnalysis, setLanguage } = settingsSlice.actions;
+export const { setOpenAiApiKey, setAutoAnalysis, setLanguage, setDevMode } = settingsSlice.actions;
 export default settingsSlice.reducer;

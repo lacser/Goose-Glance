@@ -16,12 +16,14 @@ function App() {
   const {
     apiKey,
     setApiKey,
-    autoAnalysis,
-    setAutoAnalysis,
     language,
     setLanguage,
     testStatus,
     testMessage,
+    autoAnalysis,
+    setAutoAnalysis,
+    devMode,
+    setDevMode,
     saveStatus,
     saveSettings,
     testApiKey,
@@ -68,16 +70,6 @@ function App() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <div className="flex justify-between items-center">
-            <Text font="base">Auto Analysis</Text>
-            <Switch
-              checked={autoAnalysis}
-              onChange={(e) => setAutoAnalysis(e.target.checked)}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
           <Text font="base">Language</Text>
           <Combobox
             value={language}
@@ -89,6 +81,28 @@ function App() {
             <Option value="French">French</Option>
             <Option value="Chinese">Chinese (Simplified)</Option>
           </Combobox>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <Text font="base">Auto Analysis</Text>
+              <Switch
+                checked={autoAnalysis}
+                onChange={(e) => setAutoAnalysis(e.target.checked)}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <Text font="base">DEV Mode</Text>
+              <Switch
+                checked={devMode}
+                onChange={(e) => setDevMode(e.target.checked)}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
