@@ -51,7 +51,6 @@ async function createPanel() {
     if (event.data && event.data.type === "adjustHeight") {
       const iframe = document.querySelector('iframe[src^="chrome-extension://"]');
       if (iframe) {
-        console.log("Adjusting iframe height to:", event.data.height);
         iframe.style.height = event.data.height + "px";
       }
     }

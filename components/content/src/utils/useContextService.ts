@@ -26,7 +26,6 @@ export const useContextService = () => {
 
 const setupJobDescriptionListener = (dispatch: Dispatch) => {
   const messageListener = (event: MessageEvent) => {
-    console.log("Received message", event.data);
     if (event.data && event.data.type === "SET_JOB_DESCRIPTION") {
       dispatch(setJobDescription(event.data.payload));
     }
