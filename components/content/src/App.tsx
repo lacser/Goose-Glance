@@ -1,7 +1,7 @@
 import { useContextService } from "./utils/useContextService";
 import { DevContent } from "./components/devContent";
 import { useAppSelector } from "./store/hooks";
-import { RoleSummaryCard } from "./components";
+import { RoleSummaryCard, IdentityRequirementsCard } from "./components";
 
 function App() {
   useContextService();
@@ -14,6 +14,7 @@ function App() {
     <>
       <div className="flex gap-2 p-2">
         <RoleSummaryCard />
+        <IdentityRequirementsCard />
       </div>
     </>
   );

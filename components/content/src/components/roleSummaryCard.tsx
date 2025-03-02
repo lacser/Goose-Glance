@@ -32,7 +32,7 @@ export default function RoleSummaryCard({
 
   return (
     <div
-      className={`p-[0.8rem] w-[300px] ${className} rounded-md shadow-md border border-gray-200`}
+      className={`p-[0.8rem] w-[300px] h-fit ${className} rounded-md shadow-md border border-gray-200`}
     >
       <div className="flex items-center justify-start gap-3 mb-2">
         <Symbols iconSize="24px">badge</Symbols>
