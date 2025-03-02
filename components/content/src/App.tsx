@@ -1,7 +1,7 @@
 import { useContextService } from "./utils/useContextService";
-import { DevContent } from "./components/DevContent";
+import { DevContent } from "./components/devContent";
 import { useAppSelector } from "./store/hooks";
-import Symbols from "./components/Symbols";
+import Symbols from "./components/symbols";
 
 function App() {
   useContextService();

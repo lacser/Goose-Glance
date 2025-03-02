@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "../store/hooks";
-import { setJobDescription } from "../store/slices/waterlooworksSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setJobDescription, setJobSummary } from "../store/slices/waterlooworksSlice";
 import {
   setOpenAiApiKey,
   setAutoAnalysis,
@@ -11,6 +11,13 @@ import { Dispatch } from "@reduxjs/toolkit";
 
 export const useContextService = () => {
   const dispatch = useAppDispatch();
+  const jobData = useAppSelector((state) => state.waterlooworks.jobData);
+
+  useEffect(() => {
+    if (Object.keys(jobData).length > 0) {
+      chrome.storage.sync.set({ waterlooworksJobData: jobData });
+    }
+  }, [jobData]);
 
   useEffect(() => {
     const cleanupMessageListener = setupJobDescriptionListener(dispatch);
@@ -75,9 +82,8 @@ const setupHeightObserver = () => {
 };
 
 const setupChromeStorageListener = (dispatch: Dispatch) => {
-  // Initial load of settings
   chrome.storage.sync.get(
-    ["openaiApiKey", "autoAnalysis", "language"],
+    ["openaiApiKey", "autoAnalysis", "language", "devMode", "waterlooworksJobData"],
     (result) => {
       if (result.openaiApiKey) {
         dispatch(setOpenAiApiKey(result.openaiApiKey));
@@ -90,6 +96,26 @@ const setupChromeStorageListener = (dispatch: Dispatch) => {
       }
       if (result.devMode) {
         dispatch(setDevMode(result.devMode));
+      }
+      
+      if (result.waterlooworksJobData) {
+        const jobData = result.waterlooworksJobData;
+        
+        Object.keys(jobData).forEach((id) => {
+          if (jobData[id].description) {
+            dispatch(setJobDescription({ 
+              id, 
+              description: jobData[id].description 
+            }));
+          }
+          
+          if (jobData[id].summary) {
+            dispatch(setJobSummary({ 
+              id, 
+              summary: jobData[id].summary 
+            }));
+          }
+        });
       }
     }
   );
@@ -109,6 +135,25 @@ const setupChromeStorageListener = (dispatch: Dispatch) => {
     }
     if (changes.devMode) {
       dispatch(setDevMode(changes.devMode.newValue));
+    }
+    if (changes.waterlooworksJobData) {
+      const jobData = changes.waterlooworksJobData.newValue;
+      
+      Object.keys(jobData).forEach((id) => {
+        if (jobData[id].description) {
+          dispatch(setJobDescription({ 
+            id, 
+            description: jobData[id].description 
+          }));
+        }
+        
+        if (jobData[id].summary) {
+          dispatch(setJobSummary({ 
+            id, 
+            summary: jobData[id].summary 
+          }));
+        }
+      });
     }
   };
 
