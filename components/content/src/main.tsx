@@ -7,10 +7,15 @@ import { store } from "./store";
 import "./index.css";
 import App from "./App.tsx";
 
+const customTheme = {
+  ...webLightTheme,
+  fontFamilyBase: "'Poppins-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+};
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <FluentProvider theme={webLightTheme}>
+      <FluentProvider theme={customTheme}>
         <App />
       </FluentProvider>
     </Provider>

@@ -74,7 +74,7 @@ const initialState: LLMConfigState = {
         },
         "key_roles": {
           "type": "array",
-          "description": "1-3 key responsibilities of the role with **bolded work content**",
+          "description": "1-3 key responsibilities of the role with <mark>helighted keywords</mark>.",
           "items": {
             "type": "string"
           }

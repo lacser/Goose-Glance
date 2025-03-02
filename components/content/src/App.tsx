@@ -1,7 +1,7 @@
 import { useContextService } from "./utils/useContextService";
 import { DevContent } from "./components/devContent";
 import { useAppSelector } from "./store/hooks";
-import Symbols from "./components/symbols";
+import { RoleSummaryCard } from "./components";
 
 function App() {
   useContextService();
@@ -12,8 +12,9 @@ function App() {
   }
   return (
     <>
-      <h1>User Page Under Construction</h1>
-      <Symbols color="black">construction</Symbols>
+      <div className="flex gap-2 p-2">
+        <RoleSummaryCard />
+      </div>
     </>
   );
 }
