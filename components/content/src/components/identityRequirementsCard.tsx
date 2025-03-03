@@ -99,17 +99,17 @@ export default function IdentityRequirementsCard({
   const renderRequirementItem = (requirement: Requirement) => {
     const style = getStatusStyle(requirement.status);
     return (
-      <div key={requirement.name} className="flex items-center justify-between mt-3">
-        <span className="text-base">{requirement.name}</span>
+      <div key={requirement.name} className="flex items-center justify-between mt-2">
+        <span className="text-sm">{requirement.name}</span>
         <div
-          className="flex items-center gap-1 px-2 py-1 rounded-md"
+          className="flex items-center gap-1 pl-2 pr-1 py-1 rounded-md text-nowrap"
           style={{
             backgroundColor: style.bgColor,
             color: style.textColor,
           }}
         >
           <span>{requirement.status}</span>
-          <Symbols iconSize="18px" fill={1}>
+          <Symbols iconSize="20px">
             {style.icon}
           </Symbols>
         </div>
@@ -121,28 +121,28 @@ export default function IdentityRequirementsCard({
     <div
       className={`p-[0.8rem] w-[300px] h-fit ${className} rounded-md shadow-md border border-gray-200`}
     >
-      <div className="flex items-center justify-start gap-3 mb-4">
+      <div className="flex items-center justify-start gap-3 mb-2">
         <Symbols iconSize="24px">siren</Symbols>
         <h2 className="text-base font-semibold">Special Requirements</h2>
       </div>
 
       {/* Required Items */}
       {requiredItems.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-2">
           {requiredItems.map(renderRequirementItem)}
         </div>
       )}
 
       {/* Preferred Items */}
       {preferredItems.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-2">
           {preferredItems.map(renderRequirementItem)}
         </div>
       )}
 
       {/* Other Special Requirements */}
       {otherRequirements.length > 0 && (
-        <div className="mt-4 mb-4">
+        <div className="mb-2">
           <div className="flex items-center justify-start gap-3 mb-3">
             <Symbols iconSize="24px">radar</Symbols>
             <h3 className="text-base font-semibold">
@@ -166,7 +166,7 @@ export default function IdentityRequirementsCard({
 
       {/* Not Required Section */}
       {notRequiredItems.length > 0 && (
-        <div className="mt-4">
+        <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <Symbols iconSize="24px">search_check_2</Symbols>
