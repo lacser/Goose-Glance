@@ -7,10 +7,12 @@ interface JobInfo {
 
 export interface WaterlooWorksState {
   jobData: { [key: string]: JobInfo };
+  onJobId: string | null;
 }
 
 const initialState: WaterlooWorksState = {
-  jobData: {}
+  jobData: {},
+  onJobId: null
 };
 
 export const waterlooworksSlice = createSlice({
@@ -32,10 +34,13 @@ export const waterlooworksSlice = createSlice({
           summary: action.payload.summary
         };
       }
+    },
+    setOnJobId: (state, action: PayloadAction<string | null>) => {
+      state.onJobId = action.payload;
     }
   }
 });
 
-export const { setJobDescription, setJobSummary } = waterlooworksSlice.actions;
+export const { setJobDescription, setJobSummary, setOnJobId } = waterlooworksSlice.actions;
 
 export default waterlooworksSlice.reducer;

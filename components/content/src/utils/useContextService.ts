@@ -1,6 +1,9 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { setJobDescription, setJobSummary } from "../store/slices/waterlooworksSlice";
+import { useAppDispatch } from "../store/hooks";
+import {
+  setJobDescription,
+  setOnJobId,
+} from "../store/slices/waterlooworksSlice";
 import {
   setOpenAiApiKey,
   setAutoAnalysis,
@@ -11,13 +14,6 @@ import { Dispatch } from "@reduxjs/toolkit";
 
 export const useContextService = () => {
   const dispatch = useAppDispatch();
-  const jobData = useAppSelector((state) => state.waterlooworks.jobData);
-
-  useEffect(() => {
-    if (Object.keys(jobData).length > 0) {
-      chrome.storage.sync.set({ waterlooworksJobData: jobData });
-    }
-  }, [jobData]);
 
   useEffect(() => {
     const cleanupMessageListener = setupJobDescriptionListener(dispatch);
@@ -34,8 +30,13 @@ export const useContextService = () => {
 
 const setupJobDescriptionListener = (dispatch: Dispatch) => {
   const messageListener = (event: MessageEvent) => {
-    if (event.data && event.data.type === "SET_JOB_DESCRIPTION") {
+    if (
+      event.data &&
+      event.data.payload.id &&
+      event.data.type === "SET_JOB_DESCRIPTION"
+    ) {
       dispatch(setJobDescription(event.data.payload));
+      dispatch(setOnJobId(event.data.payload.id));
     }
   };
 
@@ -51,7 +52,10 @@ const setupHeightObserver = () => {
 
   const sendHeight = () => {
     const height = document.body.offsetHeight;
-    window.parent.postMessage({ type: "adjustHeight", height }, "https://waterlooworks.uwaterloo.ca/*");
+    window.parent.postMessage(
+      { type: "adjustHeight", height },
+      "https://waterlooworks.uwaterloo.ca/*"
+    );
   };
 
   const debouncedSendHeight = () => {
@@ -83,7 +87,7 @@ const setupHeightObserver = () => {
 
 const setupChromeStorageListener = (dispatch: Dispatch) => {
   chrome.storage.sync.get(
-    ["openaiApiKey", "autoAnalysis", "language", "devMode", "waterlooworksJobData"],
+    ["openaiApiKey", "autoAnalysis", "language", "devMode"],
     (result) => {
       if (result.openaiApiKey) {
         dispatch(setOpenAiApiKey(result.openaiApiKey));
@@ -96,26 +100,6 @@ const setupChromeStorageListener = (dispatch: Dispatch) => {
       }
       if (result.devMode) {
         dispatch(setDevMode(result.devMode));
-      }
-      
-      if (result.waterlooworksJobData) {
-        const jobData = result.waterlooworksJobData;
-        
-        Object.keys(jobData).forEach((id) => {
-          if (jobData[id].description) {
-            dispatch(setJobDescription({ 
-              id, 
-              description: jobData[id].description 
-            }));
-          }
-          
-          if (jobData[id].summary) {
-            dispatch(setJobSummary({ 
-              id, 
-              summary: jobData[id].summary 
-            }));
-          }
-        });
       }
     }
   );
@@ -135,25 +119,6 @@ const setupChromeStorageListener = (dispatch: Dispatch) => {
     }
     if (changes.devMode) {
       dispatch(setDevMode(changes.devMode.newValue));
-    }
-    if (changes.waterlooworksJobData) {
-      const jobData = changes.waterlooworksJobData.newValue;
-      
-      Object.keys(jobData).forEach((id) => {
-        if (jobData[id].description) {
-          dispatch(setJobDescription({ 
-            id, 
-            description: jobData[id].description 
-          }));
-        }
-        
-        if (jobData[id].summary) {
-          dispatch(setJobSummary({ 
-            id, 
-            summary: jobData[id].summary 
-          }));
-        }
-      });
     }
   };
 
