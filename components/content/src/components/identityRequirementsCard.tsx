@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import Symbols from "./symbols";
 
@@ -13,13 +14,14 @@ interface Requirement {
 export default function IdentityRequirementsCard({
   className = "",
 }: IdentityRequirementsCardProps) {
+  const [showNotRequiredItems, setShowNotRequiredItems] = useState(true);
+
   const jobSummary = useAppSelector((state) => {
     const jobID = state.waterlooworks.onJobId;
     if (!jobID) return null;
     const jobData = state.waterlooworks.jobData[jobID];
     return jobData?.summary || null;
   });
-
   if (!jobSummary) {
     return null;
   }
@@ -68,7 +70,10 @@ export default function IdentityRequirementsCard({
     },
     {
       name: "Work Visa",
-      status: summaryData.canadian_citizen_or_pr === "Required" ? "Required" : "Not Required",
+      status:
+        summaryData.canadian_citizen_or_pr === "Required"
+          ? "Required"
+          : "Not Required",
     },
     {
       name: "French Fluency",
@@ -99,7 +104,10 @@ export default function IdentityRequirementsCard({
   const renderRequirementItem = (requirement: Requirement) => {
     const style = getStatusStyle(requirement.status);
     return (
-      <div key={requirement.name} className="flex items-center justify-between mt-2">
+      <div
+        key={requirement.name}
+        className="flex items-center justify-between mt-2"
+      >
         <span className="text-sm">{requirement.name}</span>
         <div
           className="flex items-center gap-1 pl-2 pr-1 py-1 rounded-md text-nowrap"
@@ -109,9 +117,7 @@ export default function IdentityRequirementsCard({
           }}
         >
           <span>{requirement.status}</span>
-          <Symbols iconSize="20px">
-            {style.icon}
-          </Symbols>
+          <Symbols iconSize="20px">{style.icon}</Symbols>
         </div>
       </div>
     );
@@ -128,38 +134,32 @@ export default function IdentityRequirementsCard({
 
       {/* Required Items */}
       {requiredItems.length > 0 && (
-        <div className="mb-2">
-          {requiredItems.map(renderRequirementItem)}
-        </div>
+        <div className="mb-2">{requiredItems.map(renderRequirementItem)}</div>
       )}
 
       {/* Preferred Items */}
       {preferredItems.length > 0 && (
-        <div className="mb-2">
-          {preferredItems.map(renderRequirementItem)}
-        </div>
+        <div className="mb-2">{preferredItems.map(renderRequirementItem)}</div>
       )}
 
       {/* Other Special Requirements */}
       {otherRequirements.length > 0 && (
         <div className="mb-2">
-          <div className="flex items-center justify-start gap-3 mb-3">
+          <div className="flex items-center justify-start gap-3 mb-2">
             <Symbols iconSize="24px">radar</Symbols>
             <h3 className="text-base font-semibold">
               Other Special Requirements
             </h3>
           </div>
           <ul className="space-y-2">
-            {otherRequirements.map(
-              (req: string, index: number) => (
-                <li
-                  key={index}
-                  className="text-base border-l-2 border-gray-300 pl-3"
-                >
-                  {req}
-                </li>
-              )
-            )}
+            {otherRequirements.map((req: string, index: number) => (
+              <li
+                key={index}
+                className="text-base border-l-2 border-gray-300 pl-3"
+              >
+                {req}
+              </li>
+            ))}
           </ul>
         </div>
       )}
@@ -167,17 +167,23 @@ export default function IdentityRequirementsCard({
       {/* Not Required Section */}
       {notRequiredItems.length > 0 && (
         <div>
-          <div className="flex items-center justify-between mb-3">
+          <div className={`flex items-center justify-between ${showNotRequiredItems ? "mb-2" : ""}`}>
             <div className="flex items-center gap-3">
               <Symbols iconSize="24px">search_check_2</Symbols>
-              <h3 className="text-base font-semibold">
-                Not Required
-              </h3>
+              <h3 className="text-base font-semibold">Not Required</h3>
             </div>
-            <Symbols iconSize="24px">keyboard_arrow_down</Symbols>
+            <button
+              onClick={() => setShowNotRequiredItems(!showNotRequiredItems)}
+              className="flex items-center justify-center hover:bg-gray-100 rounded-full"
+              aria-label={showNotRequiredItems ? "Hide not required items" : "Show not required items"}
+            >
+              <Symbols iconSize="24px">
+                {showNotRequiredItems ? "keyboard_arrow_up" : "keyboard_arrow_down"}
+              </Symbols>
+            </button>
           </div>
-          
-          {notRequiredItems.map(renderRequirementItem)}
+
+          {showNotRequiredItems && notRequiredItems.map(renderRequirementItem)}
         </div>
       )}
     </div>
