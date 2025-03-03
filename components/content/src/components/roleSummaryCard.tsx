@@ -8,23 +8,20 @@ export interface RoleSummaryCardProps {
 export default function RoleSummaryCard({
   className = "",
 }: RoleSummaryCardProps) {
-  const jobData = useAppSelector((state) => {
-    const data = state.waterlooworks.jobData;
-    const ids = Object.keys(data);
-    return ids.length > 0
-      ? {
-          summary: data[ids[ids.length - 1]].summary,
-        }
-      : null;
+  const jobSummary = useAppSelector((state) => {
+    const jobID = state.waterlooworks.onJobId;
+    if (!jobID) return null;
+    const jobData = state.waterlooworks.jobData[jobID];
+    return jobData?.summary || null;
   });
 
-  if (!jobData?.summary) {
+  if (!jobSummary) {
     return null;
   }
 
   let summaryData;
   try {
-    summaryData = JSON.parse(jobData.summary);
+    summaryData = JSON.parse(jobSummary);
   } catch (e) {
     console.error("Error parsing summary:", e);
     return null;

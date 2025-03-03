@@ -1,10 +1,12 @@
 import { useContextService } from "./utils/useContextService";
+import { useIndexedDB } from "./utils/useIndexedDB";
 import { DevContent } from "./components/devContent";
 import { useAppSelector } from "./store/hooks";
 import { RoleSummaryCard, IdentityRequirementsCard } from "./components";
 
 function App() {
   useContextService();
+  useIndexedDB();
   const devMode = useAppSelector((state) => state.settings.devMode);
 
   if (devMode) {
