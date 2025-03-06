@@ -10,10 +10,10 @@ export interface ModelConfig {
 }
 
 export interface SchemaProperty {
-  type: string | string[];
+  type: string | string[] | number[] | boolean;
   description: string;
   items?: {
-    type: string;
+    type: string | number;
     enum?: string[];
   };
   enum?: string[];
@@ -27,8 +27,9 @@ export interface OutputSchema {
     properties: {
       job_title: SchemaProperty;
       key_roles: SchemaProperty;
-      work_term_length: SchemaProperty;
+      work_term_year: SchemaProperty;
       work_term_month: SchemaProperty;
+      work_term_date: SchemaProperty;
       work_type: SchemaProperty;
       working_location: SchemaProperty;
       company_name: SchemaProperty;
@@ -79,9 +80,12 @@ const initialState: LLMConfigState = {
             "type": "string"
           }
         },
-        "work_term_length": {
-          "type": ["number", "null"],
-          "description": "Duration of employment in months (Usually multiples of 4)"
+        "work_term_year": {
+          "type": ["array", "null"],
+          "description": "Start and end year of the work term (e.g. [2024, 2025])",
+          "items": {
+            "type": "number"
+          }
         },
         "work_term_month": {
           "type": ["array", "null"],
@@ -102,6 +106,13 @@ const initialState: LLMConfigState = {
               "November",
               "December"
             ]
+          }
+        },
+        "work_term_date": {
+          "type": ["array", "null"],
+          "description": "Start and end date of the work term (e.g. [1, 31])",
+          "items": {
+            "type": "number"
           }
         },
         "work_type": {
@@ -165,8 +176,9 @@ const initialState: LLMConfigState = {
       "required": [
         "job_title",
         "key_roles",
-        "work_term_length",
+        "work_term_year",
         "work_term_month",
+        "work_term_date",
         "work_type",
         "working_location",
         "company_name",

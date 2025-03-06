@@ -1,8 +1,12 @@
 import { useContextService } from "./utils/useContextService";
 import { useIndexedDB } from "./utils/useIndexedDB";
-import { DevContent } from "./components/devContent";
 import { useAppSelector } from "./store/hooks";
-import { RoleSummaryCard, IdentityRequirementsCard } from "./components";
+import { DevContent } from "./components/devContent";
+import {
+  RoleSummaryCard,
+  IdentityRequirementsCard,
+  WorkDurationCard,
+} from "./components";
 
 function App() {
   useContextService();
@@ -14,9 +18,10 @@ function App() {
   }
   return (
     <>
-      <div className="flex gap-2 p-2">
+      <div className="flex gap-2 p-2 flex-wrap">
         <RoleSummaryCard />
         <IdentityRequirementsCard />
+        <WorkDurationCard />
       </div>
     </>
   );
