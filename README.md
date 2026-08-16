@@ -1,6 +1,6 @@
 # Goose Glance <img src="./public/icons/icon128.png" alt="LOGO" width="30"> </br>Job details at a glance
 
-Translations: [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Français](README.fr.md)
+Translation: [简体中文](README.zh-CN.md)
 
 ![Welcome Image](./components/pages/public/WelcomeImage.webp)
 
