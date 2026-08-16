@@ -18,17 +18,17 @@
     "@fluentui/react-icons": "^2.0.308",
     "@mlc-ai/web-llm": "^0.2.79",
     "@reduxjs/toolkit": "^2.5.1",
-    "@tailwindcss/postcss": "^4.0.6",
+    "@tailwindcss/postcss": "^4.3.3",
     "i18next": "^25.4.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.7.3",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.8.2"
+    "react-router-dom": "^7.18.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
+    "@eslint/js": "^9.39.5",
     "@types/chrome": "^0.0.304",
     "@types/node": "^22.13.4",
     "@types/react": "^18.3.18",
@@ -36,16 +36,16 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.17",
-    "eslint": "^9.17.0",
+    "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "nodemon": "^3.1.9",
-    "postcss": "^8.4.35",
+    "postcss": "^8.5.26",
     "tailwindcss": "^3.4.1",
     "typescript": "~5.6.2",
-    "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "typescript-eslint": "^8.67.0",
+    "vite": "^6.4.3"
   },
   "packageManager": "yarn@4.9.2+sha512.1fc009bc09d13cfd0e19efa44cbfc2b9cf6ca61482725eb35bbc5e257e093ebf4130db6dfe15d604ff4b79efd8e1e8e99b25fa7d0a6197c9f9826358d4d65c3c"
 }
