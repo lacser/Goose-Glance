@@ -1,4 +1,6 @@
-// Note: TurndownService is loaded via web_accessible_resources (public/utils/turndown.js)
+import { initializePreAnalyze } from "./pre_analyze";
+
+// Note: TurndownService is loaded before this content script (public/utils/turndown.js)
 declare class TurndownService {
   constructor(options?: { headingStyle?: string });
   turndown(input: string | Node): string;
@@ -7,6 +9,7 @@ declare class TurndownService {
 let currentJobId: string | null = null;
 let pendingJobData: { jobId: string | null; description: string } | null = null;
 let docViewer: HTMLElement | null = null;
+let initialized = false;
 
 // Inject additional CSS to job posting page
 function injectStyles() {
@@ -38,7 +41,11 @@ type MessageData =
 
 function handleMessage(event: MessageEvent<MessageData>) {
   if (event.data && event.data.type === "adjustHeight") {
-    const iframe = document.querySelector('iframe[src^="chrome-extension://"]') as HTMLIFrameElement | null;
+    const iframe = Array.from(
+      document.querySelectorAll<HTMLIFrameElement>(
+        'iframe[src^="chrome-extension://"]:not([data-goose-glance-worker])'
+      )
+    ).find((candidate) => candidate.contentWindow === event.source);
     if (iframe) {
       iframe.style.height = String(event.data.height) + "px";
     }
@@ -108,7 +115,12 @@ function handleMessage(event: MessageEvent<MessageData>) {
   }
 
   if (event.data && event.data.type === "IFRAME_HOOK_READY") {
-    if (pendingJobData) {
+    const visibleIframeIsReady = Array.from(
+      document.querySelectorAll<HTMLIFrameElement>(
+        'iframe[src^="chrome-extension://"]:not([data-goose-glance-worker])'
+      )
+    ).some((iframe) => iframe.contentWindow === event.source);
+    if (pendingJobData && visibleIframeIsReady) {
       sendJobDescriptionToIframe(pendingJobData.jobId, pendingJobData.description);
       pendingJobData = null;
     }
@@ -141,7 +153,9 @@ function createPanel(contentDiv: HTMLElement) {
 }
 
 function sendJobDescriptionToIframe(jobId: string | null, description: string) {
-  const iframes = document.querySelectorAll('iframe[src^="chrome-extension://"]');
+  const iframes = document.querySelectorAll(
+    'iframe[src^="chrome-extension://"]:not([data-goose-glance-worker])'
+  );
   iframes.forEach((iframe) => {
     const win = (iframe as HTMLIFrameElement).contentWindow;
     if (win) {
@@ -242,9 +256,12 @@ function setupMutationObserver() {
 }
 
 async function initialize() {
+  if (initialized) return;
+  initialized = true;
   try {
     injectStyles();
     window.addEventListener("message", handleMessage);
+    await initializePreAnalyze();
     await processPageChanges();
     setupMutationObserver();
   } catch (error) {

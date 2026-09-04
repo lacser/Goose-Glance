@@ -1,0 +1,7 @@
+.DS_Store
+results/
+generated_images/
+*.png
+!assets/
+!assets/ip-as-logo-wall.webp
+/website/

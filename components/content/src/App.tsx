@@ -4,6 +4,7 @@ import { useIndexedDB } from "./hooks/useIndexedDB";
 import { useSettingsSync } from "./hooks/useSettingsSync";
 import { useScrollForwarding } from "./hooks/useScrollForwarding";
 import { useAutoAnalysis } from "./hooks/useAutoAnalysis";
+import { useBulkAnalysis } from "./hooks/useBulkAnalysis";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { setCollapsed as setCollapsedAction } from "./store/slices/settingsSlice";
 import { useJobSummary } from "./hooks/useJobData";
@@ -29,6 +30,7 @@ function App() {
   useSettingsSync();
   useScrollForwarding();
   useAutoAnalysis();
+  useBulkAnalysis();
 
   const dispatch = useAppDispatch();
   const collapsed = useAppSelector((state) => state.settings.collapsed);
